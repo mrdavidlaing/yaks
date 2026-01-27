@@ -45,14 +45,20 @@ direnv allow
 
 ### Building from Source
 
-The project is written in Go. To build:
+The project is written in Go. Build the binary using the included build script:
 
 ```bash
-# Using direnv (recommended)
-direnv exec . go build -o bin/yx-go ./cmd/yx
+# Build the binary
+./bin/build
 
-# Or with Go directly
-go build -o bin/yx-go ./cmd/yx
+# Then use it
+./bin/yx add "my task"
+```
+
+Or build manually:
+
+```bash
+go build -o bin/yx ./cmd/yx
 ```
 
 Requirements:

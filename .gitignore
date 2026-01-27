@@ -19,3 +19,7 @@ devenv.local.yaml
 
 # worktrees
 .worktrees
+
+# Compiled binaries
+bin/yx
+bin/yx-go
