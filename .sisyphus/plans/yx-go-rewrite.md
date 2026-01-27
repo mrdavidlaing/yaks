@@ -258,15 +258,9 @@ Critical Path: 1 → 2 → 3 → 4 → 8 → 11 → 12 → 15
   - [x] Directory structure exists as specified
 
   **Manual Verification**:
-  ```bash
-  # Verify Go in devenv
-  which go  # Should show devenv path
-  go version  # Should show 1.22+
-  
-  # Verify build
-  go build -o bin/yx-go ./cmd/yx
-  ./bin/yx-go --help
-  ```
+  - [x] Command exists: `./bin/yx-go --help`
+  - [x] Output matches bash: `diff <(./bin/yx <args>) <(./bin/yx-go <args>)`
+  - [x] Error output matches: `diff <(./bin/yx bad 2>&1) <(./bin/yx-go bad 2>&1)`
 
   **Commit**: YES
   - Message: `feat(go): initialize Go project structure with Cobra CLI`
