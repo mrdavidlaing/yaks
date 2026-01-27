@@ -34,6 +34,7 @@ func main() {
 	rootCmd.AddCommand(cmd.NewMoveCmd(store))
 	rootCmd.AddCommand(cmd.NewMvCmd(store))
 	rootCmd.AddCommand(cmd.NewPruneCmd(store))
+	rootCmd.AddCommand(cmd.NewSyncCmd(store))
 
 	if err := rootCmd.Execute(); err != nil {
 		os.Exit(1)
