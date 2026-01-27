@@ -157,3 +157,33 @@ func (s *Store) Migrate() error {
 		return nil
 	})
 }
+
+func (s *Store) EnsureParents(name string) error {
+	parent := filepath.Dir(name)
+	if parent == "." {
+		return nil
+	}
+
+	// Split parent path and create each level
+	parts := strings.Split(parent, string(filepath.Separator))
+	current := ""
+	for _, part := range parts {
+		if current == "" {
+			current = part
+		} else {
+			current = filepath.Join(current, part)
+		}
+		if !s.Exists(current) {
+			if err := s.Create(current); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+func (s *Store) Move(oldName, newName string) error {
+	oldPath := filepath.Join(s.BasePath, oldName)
+	newPath := filepath.Join(s.BasePath, newName)
+	return os.Rename(oldPath, newPath)
+}
