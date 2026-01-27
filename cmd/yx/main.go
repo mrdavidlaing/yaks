@@ -29,6 +29,7 @@ func main() {
 
 	rootCmd.AddCommand(cmd.NewAddCmd(store))
 	rootCmd.AddCommand(cmd.NewRmCmd(store))
+	rootCmd.AddCommand(cmd.NewContextCmd(store))
 
 	if err := rootCmd.Execute(); err != nil {
 		os.Exit(1)
