@@ -1123,7 +1123,7 @@ Critical Path: 1 → 2 → 3 → 4 → 8 → 11 → 12 → 15
 
 ### Task 14: Completions Install Command
 
-- [ ] 14. Completions Install Command
+- [x] 14. Completions Install Command
 
   **What to do**:
   - Extend `internal/cmd/completions.go`:
