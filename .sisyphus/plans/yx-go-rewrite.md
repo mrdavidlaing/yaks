@@ -251,11 +251,11 @@ Critical Path: 1 → 2 → 3 → 4 → 8 → 11 → 12 → 15
 
   **Acceptance Criteria**:
 
-  - [ ] `devenv.nix` updated with Go language
-  - [ ] `go mod init` creates go.mod
-  - [ ] `go build -o bin/yx-go ./cmd/yx` succeeds
-  - [ ] `./bin/yx-go --help` shows help (can be placeholder)
-  - [ ] Directory structure exists as specified
+  - [x] `devenv.nix` updated with Go language
+  - [x] `go mod init` creates go.mod
+  - [x] `go build -o bin/yx-go ./cmd/yx` succeeds
+  - [x] `./bin/yx-go --help` shows help (can be placeholder)
+  - [x] Directory structure exists as specified
 
   **Manual Verification**:
   ```bash
@@ -328,13 +328,13 @@ Critical Path: 1 → 2 → 3 → 4 → 8 → 11 → 12 → 15
 
   **Acceptance Criteria**:
 
-  - [ ] Go test: `go test ./internal/yak/...` passes
-  - [ ] Store creates `.yaks/<name>/state` with "todo"
-  - [ ] Store creates `.yaks/<name>/context.md` (empty)
-  - [ ] Nested yaks: `parent/child` creates correct structure
-  - [ ] Validation rejects: `\ : * ? | < > "`
-  - [ ] Validation accepts: `/` (for nesting)
-  - [ ] Migration converts `done` file to `state` file
+  - [x] Go test: `go test ./internal/yak/...` passes
+  - [x] Store creates `.yaks/<name>/state` with "todo"
+  - [x] Store creates `.yaks/<name>/context.md` (empty)
+  - [x] Nested yaks: `parent/child` creates correct structure
+  - [x] Validation rejects: `\ : * ? | < > "`
+  - [x] Validation accepts: `/` (for nesting)
+  - [x] Migration converts `done` file to `state` file
 
   **Manual Verification**:
   ```bash
@@ -397,12 +397,12 @@ Critical Path: 1 → 2 → 3 → 4 → 8 → 11 → 12 → 15
 
   **Acceptance Criteria**:
 
-  - [ ] Go test: `go test ./internal/yak/... -run TestFuzzy` passes
-  - [ ] Exact match: `"parent/child"` finds `"parent/child"`
-  - [ ] Fuzzy match: `"build"` finds `"ideas/fix the build"` (unique)
-  - [ ] Ambiguous: `"fix"` with `"fix the build"` and `"fix the fridge"` returns error
-  - [ ] Not found: `"nonexistent"` returns "Error: yak 'nonexistent' not found"
-  - [ ] Ambiguous error: returns "Error: yak name 'fix' is ambiguous"
+  - [x] Go test: `go test ./internal/yak/... -run TestFuzzy` passes
+  - [x] Exact match: `"parent/child"` finds `"parent/child"`
+  - [x] Fuzzy match: `"build"` finds `"ideas/fix the build"` (unique)
+  - [x] Ambiguous: `"fix"` with `"fix the build"` and `"fix the fridge"` returns error
+  - [x] Not found: `"nonexistent"` returns "Error: yak 'nonexistent' not found"
+  - [x] Ambiguous error: returns "Error: yak name 'fix' is ambiguous"
 
   **Manual Verification**:
   ```bash
@@ -459,12 +459,12 @@ Critical Path: 1 → 2 → 3 → 4 → 8 → 11 → 12 → 15
 
   **Acceptance Criteria**:
 
-  - [ ] `shellspec spec/add.sh` passes (11 tests)
-  - [ ] `yx add "Fix the bug"` creates yak
-  - [ ] `yx add this is a test` creates "this is a test" yak
-  - [ ] `yx add "foo/bar"` creates nested yak
-  - [ ] `yx add "foo:bar"` fails with "Invalid yak name"
-  - [ ] Interactive mode reads stdin until empty line
+  - [x] `shellspec spec/add.sh` passes (11 tests)
+  - [x] `yx add "Fix the bug"` creates yak
+  - [x] `yx add this is a test` creates "this is a test" yak
+  - [x] `yx add "foo/bar"` creates nested yak
+  - [x] `yx add "foo:bar"` fails with "Invalid yak name"
+  - [x] Interactive mode reads stdin until empty line
 
   **Manual Verification**:
   ```bash
@@ -536,14 +536,14 @@ Critical Path: 1 → 2 → 3 → 4 → 8 → 11 → 12 → 15
 
   **Acceptance Criteria**:
 
-  - [ ] `shellspec spec/list.sh` passes (15 tests)
-  - [ ] `yx ls` shows markdown checkboxes
-  - [ ] `yx ls --format plain` shows just names
-  - [ ] `yx ls --only not-done` filters correctly
-  - [ ] Done items shown in grey ANSI
-  - [ ] Nested items indented 2 spaces per level
-  - [ ] Empty yaks shows "You have no yaks. Are you done?"
-  - [ ] Sort order: done first, then by mtime
+  - [x] `shellspec spec/list.sh` passes (15 tests)
+  - [x] `yx ls` shows markdown checkboxes
+  - [x] `yx ls --format plain` shows just names
+  - [x] `yx ls --only not-done` filters correctly
+  - [x] Done items shown in grey ANSI
+  - [x] Nested items indented 2 spaces per level
+  - [x] Empty yaks shows "You have no yaks. Are you done?"
+  - [x] Sort order: done first, then by mtime
 
   **Manual Verification**:
   ```bash
@@ -601,11 +601,11 @@ Critical Path: 1 → 2 → 3 → 4 → 8 → 11 → 12 → 15
 
   **Acceptance Criteria**:
 
-  - [ ] `shellspec spec/rm.sh` passes (5 tests)
-  - [ ] `yx rm "Fix the bug"` removes yak
-  - [ ] `yx rm this is a test` removes multi-word yak
-  - [ ] `yx rm "Nonexistent"` errors with "not found"
-  - [ ] Removes nested yaks correctly
+  - [x] `shellspec spec/rm.sh` passes (5 tests)
+  - [x] `yx rm "Fix the bug"` removes yak
+  - [x] `yx rm this is a test` removes multi-word yak
+  - [x] `yx rm "Nonexistent"` errors with "not found"
+  - [x] Removes nested yaks correctly
 
   **Manual Verification**:
   ```bash
@@ -665,12 +665,12 @@ Critical Path: 1 → 2 → 3 → 4 → 8 → 11 → 12 → 15
 
   **Acceptance Criteria**:
 
-  - [ ] `shellspec spec/context.sh` passes (7 tests)
-  - [ ] `yx context --show "yak"` shows name + context
-  - [ ] `echo "text" | yx context "yak"` sets context from stdin
-  - [ ] `yx context "yak"` (TTY) launches $EDITOR
-  - [ ] Works with nested yaks
-  - [ ] Error on nonexistent yak
+  - [x] `shellspec spec/context.sh` passes (7 tests)
+  - [x] `yx context --show "yak"` shows name + context
+  - [x] `echo "text" | yx context "yak"` sets context from stdin
+  - [x] `yx context "yak"` (TTY) launches $EDITOR
+  - [x] Works with nested yaks
+  - [x] Error on nonexistent yak
 
   **Manual Verification**:
   ```bash
@@ -729,12 +729,12 @@ Critical Path: 1 → 2 → 3 → 4 → 8 → 11 → 12 → 15
 
   **Acceptance Criteria**:
 
-  - [ ] `shellspec spec/done.sh` passes (10 tests)
-  - [ ] `yx done "yak"` marks as done (state file = "done")
-  - [ ] `yx done --undo "yak"` marks as todo
-  - [ ] `yx done --recursive "parent"` marks parent + all children
-  - [ ] Error when marking parent with incomplete children
-  - [ ] List shows done yaks in grey with [x]
+  - [x] `shellspec spec/done.sh` passes (10 tests)
+  - [x] `yx done "yak"` marks as done (state file = "done")
+  - [x] `yx done --undo "yak"` marks as todo
+  - [x] `yx done --recursive "parent"` marks parent + all children
+  - [x] Error when marking parent with incomplete children
+  - [x] List shows done yaks in grey with [x]
 
   **Manual Verification**:
   ```bash
@@ -793,13 +793,13 @@ Critical Path: 1 → 2 → 3 → 4 → 8 → 11 → 12 → 15
 
   **Acceptance Criteria**:
 
-  - [ ] `shellspec spec/move.sh` passes (8 tests)
-  - [ ] `yx move "old" "new"` renames yak
-  - [ ] `yx mv` alias works
-  - [ ] Preserves done state when moving
-  - [ ] Preserves context when moving
-  - [ ] Auto-creates parent yaks
-  - [ ] Rejects invalid new names
+  - [x] `shellspec spec/move.sh` passes (8 tests)
+  - [x] `yx move "old" "new"` renames yak
+  - [x] `yx mv` alias works
+  - [x] Preserves done state when moving
+  - [x] Preserves context when moving
+  - [x] Auto-creates parent yaks
+  - [x] Rejects invalid new names
 
   **Manual Verification**:
   ```bash
@@ -852,11 +852,11 @@ Critical Path: 1 → 2 → 3 → 4 → 8 → 11 → 12 → 15
 
   **Acceptance Criteria**:
 
-  - [ ] `shellspec spec/prune.sh` passes (7 tests, excluding git logging tests until Task 11)
-  - [ ] `yx prune` removes all done yaks
-  - [ ] Keeps all todo yaks
-  - [ ] Works with nested done yaks
-  - [ ] No-op when no done yaks
+  - [x] `shellspec spec/prune.sh` passes (7 tests, excluding git logging tests until Task 11)
+  - [x] `yx prune` removes all done yaks
+  - [x] Keeps all todo yaks
+  - [x] Works with nested done yaks
+  - [x] No-op when no done yaks
 
   **Manual Verification**:
   ```bash
@@ -925,13 +925,13 @@ Critical Path: 1 → 2 → 3 → 4 → 8 → 11 → 12 → 15
 
   **Acceptance Criteria**:
 
-  - [ ] `shellspec spec/log_command.sh` passes (7 tests)
-  - [ ] `yx add "test"` creates commit with message "add test"
-  - [ ] `yx done "test"` creates commit "done test"
-  - [ ] `yx done --undo "test"` creates commit "done --undo test"
-  - [ ] `yx rm "test"` creates commit "rm test"
-  - [ ] Commits use configured git author
-  - [ ] No commit when not in git repo
+  - [x] `shellspec spec/log_command.sh` passes (7 tests)
+  - [x] `yx add "test"` creates commit with message "add test"
+  - [x] `yx done "test"` creates commit "done test"
+  - [x] `yx done --undo "test"` creates commit "done --undo test"
+  - [x] `yx rm "test"` creates commit "rm test"
+  - [x] Commits use configured git author
+  - [x] No commit when not in git repo
 
   **Manual Verification**:
   ```bash
@@ -1009,15 +1009,15 @@ Critical Path: 1 → 2 → 3 → 4 → 8 → 11 → 12 → 15
 
   **Acceptance Criteria**:
 
-  - [ ] `shellspec spec/sync*.sh` passes (16 tests total)
-  - [ ] `yx sync` pushes local yaks to origin
-  - [ ] `yx sync` pulls remote yaks
-  - [ ] Merges yaks from multiple users
-  - [ ] Last-write-wins for concurrent modifications
-  - [ ] Works with git worktrees
-  - [ ] No pollution of git index or working tree
-  - [ ] Error when not in git repo
-  - [ ] Error when no origin remote
+  - [x] `shellspec spec/sync*.sh` passes (16 tests total)
+  - [x] `yx sync` pushes local yaks to origin
+  - [x] `yx sync` pulls remote yaks
+  - [x] Merges yaks from multiple users
+  - [x] Last-write-wins for concurrent modifications
+  - [x] Works with git worktrees
+  - [x] No pollution of git index or working tree
+  - [x] Error when not in git repo
+  - [x] Error when no origin remote
 
   **Manual Verification**:
   ```bash
@@ -1092,12 +1092,12 @@ Critical Path: 1 → 2 → 3 → 4 → 8 → 11 → 12 → 15
 
   **Acceptance Criteria**:
 
-  - [ ] `shellspec spec/completions.sh` passes (5 tests)
-  - [ ] `yx completions` outputs yak names (one per line)
-  - [ ] `yx completions done` filters to incomplete yaks
-  - [ ] `yx completions done --undo` filters to done yaks
-  - [ ] `yx completion bash` generates bash completion script
-  - [ ] `yx completion zsh` generates zsh completion script
+  - [x] `shellspec spec/completions.sh` passes (5 tests)
+  - [x] `yx completions` outputs yak names (one per line)
+  - [x] `yx completions done` filters to incomplete yaks
+  - [x] `yx completions done --undo` filters to done yaks
+  - [x] `yx completion bash` generates bash completion script
+  - [x] `yx completion zsh` generates zsh completion script
 
   **Manual Verification**:
   ```bash
@@ -1162,12 +1162,12 @@ Critical Path: 1 → 2 → 3 → 4 → 8 → 11 → 12 → 15
 
   **Acceptance Criteria**:
 
-  - [ ] `shellspec spec/completions-install.sh` passes (4 tests)
-  - [ ] Detects bash shell → ~/.bashrc
-  - [ ] Detects zsh shell → ~/.zshrc
-  - [ ] `--dry-run` shows what would be added
-  - [ ] Error for unknown shell
-  - [ ] Graceful error when can't write to rc file
+  - [x] `shellspec spec/completions-install.sh` passes (4 tests)
+  - [x] Detects bash shell → ~/.bashrc
+  - [x] Detects zsh shell → ~/.zshrc
+  - [x] `--dry-run` shows what would be added
+  - [x] Error for unknown shell
+  - [x] Graceful error when can't write to rc file
 
   **Manual Verification**:
   ```bash
@@ -1228,14 +1228,14 @@ Critical Path: 1 → 2 → 3 → 4 → 8 → 11 → 12 → 15
 
   **Acceptance Criteria**:
 
-  - [ ] `shellspec` passes 103/103 tests
-  - [ ] `go test ./...` passes all Go tests
-  - [ ] `./bin/yx --help` (Go version) works
-  - [ ] Cross-platform builds succeed
-  - [ ] Binary swapped: `bin/yx` is now Go version
-  - [ ] `bin/yx.bash.bak` preserved for rollback
-  - [ ] Old completion files removed
-  - [ ] README updated with build instructions
+  - [x] `shellspec` passes 103/103 tests
+  - [x] `go test ./...` passes all Go tests
+  - [x] `./bin/yx --help` (Go version) works
+  - [x] Cross-platform builds succeed
+  - [x] Binary swapped: `bin/yx` is now Go version
+  - [x] `bin/yx.bash.bak` preserved for rollback
+  - [x] Old completion files removed
+  - [x] README updated with build instructions
 
   **Manual Verification**:
   ```bash
