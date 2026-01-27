@@ -139,9 +139,9 @@ shellspec spec/done.sh       # After implementing done
 ### Manual Verification Procedures
 
 **For each command, verify:**
-- [ ] Command exists: `./bin/yx-go --help`
-- [ ] Output matches bash: `diff <(./bin/yx <args>) <(./bin/yx-go <args>)`
-- [ ] Error output matches: `diff <(./bin/yx bad 2>&1) <(./bin/yx-go bad 2>&1)`
+- [x] Command exists: `./bin/yx-go --help`
+- [x] Output matches bash: `diff <(./bin/yx <args>) <(./bin/yx-go <args>)`
+- [x] Error output matches: `diff <(./bin/yx bad 2>&1) <(./bin/yx-go bad 2>&1)`
 
 ---
 
