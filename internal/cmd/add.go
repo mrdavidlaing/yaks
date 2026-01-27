@@ -6,6 +6,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/mattwynne/yaks/internal/git"
 	"github.com/mattwynne/yaks/internal/yak"
 	"github.com/spf13/cobra"
 )
@@ -37,6 +38,7 @@ func addInteractive(store *yak.Store) error {
 			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 			return err
 		}
+		git.LogCommand(store.BasePath, "add "+line)
 	}
 
 	if err := scanner.Err(); err != nil {
@@ -52,5 +54,6 @@ func addSingle(store *yak.Store, name string) error {
 		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 		return err
 	}
+	git.LogCommand(store.BasePath, "add "+name)
 	return nil
 }

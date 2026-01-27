@@ -5,6 +5,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/mattwynne/yaks/internal/git"
 	"github.com/mattwynne/yaks/internal/yak"
 	"github.com/spf13/cobra"
 )
@@ -28,21 +29,23 @@ func NewDoneCmd(store *yak.Store) *cobra.Command {
 				return err
 			}
 
-			if undo {
-				if err := store.SetState(resolvedName, yak.StateTodo); err != nil {
-					fmt.Fprintf(os.Stderr, "Error: %v\n", err)
-					return err
-				}
-				return nil
+		if undo {
+			if err := store.SetState(resolvedName, yak.StateTodo); err != nil {
+				fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+				return err
 			}
+			git.LogCommand(store.BasePath, "done --undo "+resolvedName)
+			return nil
+		}
 
-			if recursive {
-				if err := store.MarkDoneRecursively(resolvedName); err != nil {
-					fmt.Fprintf(os.Stderr, "Error: %v\n", err)
-					return err
-				}
-				return nil
+		if recursive {
+			if err := store.MarkDoneRecursively(resolvedName); err != nil {
+				fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+				return err
 			}
+			git.LogCommand(store.BasePath, "done --recursive "+resolvedName)
+			return nil
+		}
 
 			hasIncomplete, err := store.HasIncompleteChildren(resolvedName)
 			if err != nil {
@@ -54,12 +57,13 @@ func NewDoneCmd(store *yak.Store) *cobra.Command {
 				return fmt.Errorf("cannot mark '%s' as done - it has incomplete children", resolvedName)
 			}
 
-			if err := store.SetState(resolvedName, yak.StateDone); err != nil {
-				fmt.Fprintf(os.Stderr, "Error: %v\n", err)
-				return err
-			}
+		if err := store.SetState(resolvedName, yak.StateDone); err != nil {
+			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+			return err
+		}
+		git.LogCommand(store.BasePath, "done "+resolvedName)
 
-			return nil
+		return nil
 		},
 	}
 

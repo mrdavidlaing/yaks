@@ -7,6 +7,7 @@ import (
 	"os/exec"
 	"strings"
 
+	"github.com/mattwynne/yaks/internal/git"
 	"github.com/mattwynne/yaks/internal/yak"
 	"github.com/spf13/cobra"
 )
@@ -37,10 +38,10 @@ func NewContextCmd(store *yak.Store) *cobra.Command {
 			}
 			contextPath := fmt.Sprintf("%s/%s/context.md", yakDir, resolvedName)
 
-			if showFlag {
-				return showContext(resolvedName, contextPath)
-			}
-			return editContext(resolvedName, contextPath)
+		if showFlag {
+			return showContext(resolvedName, contextPath)
+		}
+		return editContext(store, resolvedName, contextPath)
 		},
 	}
 
@@ -63,13 +64,11 @@ func showContext(resolvedName, contextPath string) error {
 	return nil
 }
 
-func editContext(resolvedName, contextPath string) error {
-	// Check if stdin is a TTY
+func editContext(store *yak.Store, resolvedName, contextPath string) error {
 	fi, _ := os.Stdin.Stat()
 	isTTY := (fi.Mode() & os.ModeCharDevice) != 0
 
 	if isTTY {
-		// Launch editor
 		editor := os.Getenv("EDITOR")
 		if editor == "" {
 			editor = "vi"
@@ -78,10 +77,13 @@ func editContext(resolvedName, contextPath string) error {
 		cmd.Stdin = os.Stdin
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
-		return cmd.Run()
+		if err := cmd.Run(); err != nil {
+			return err
+		}
+		git.LogCommand(store.BasePath, "context "+resolvedName)
+		return nil
 	}
 
-	// Read from stdin
 	content, err := io.ReadAll(os.Stdin)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error reading from stdin: %v\n", err)
@@ -92,6 +94,7 @@ func editContext(resolvedName, contextPath string) error {
 		fmt.Fprintf(os.Stderr, "Error writing context: %v\n", err)
 		return err
 	}
+	git.LogCommand(store.BasePath, "context "+resolvedName)
 
 	return nil
 }

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/mattwynne/yaks/internal/git"
 	"github.com/mattwynne/yaks/internal/yak"
 	"github.com/spf13/cobra"
 )
@@ -59,6 +60,7 @@ func moveYak(store *yak.Store, oldName, newName string) error {
 		fmt.Fprintf(nil, "Error: %v\n", err)
 		return err
 	}
+	git.LogCommand(store.BasePath, "move "+resolvedOld+" "+newName)
 
 	return nil
 }
