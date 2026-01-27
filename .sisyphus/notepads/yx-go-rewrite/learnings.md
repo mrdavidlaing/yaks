@@ -763,3 +763,56 @@
 - **Sorting matters**: Consistent output order is important for shell completion
 - **Filter by state**: Reuses yak.StateTodo and yak.StateDone constants
 - **Graceful degradation**: Skips yaks that can't be retrieved instead of failing
+
+## Task 13: Cobra Shell Completions
+
+### Completions Command Pattern
+- **Command**: `yx completions [command] [flags]`
+- **DisableFlagParsing**: Set to `true` to allow flags like `--undo` to be passed as arguments
+- **Filtering logic**: Check command name and flag to determine which yaks to show
+- **Sorted output**: Use `sort.Strings()` for consistent alphabetical ordering
+
+### Filtering Implementation
+- **`done` command**: Show only incomplete yaks (State == StateTodo)
+- **`done --undo`**: Show only done yaks (State == StateDone)
+- **Other commands**: Show all yaks
+- **Error handling**: Skip yaks that can't be retrieved (return false from shouldInclude)
+
+### Key Insights
+- **DisableFlagParsing is critical**: Without it, Cobra parses `--undo` as a flag instead of an argument
+- **Sorted output**: Tests expect alphabetical order, not filesystem order
+- **Simple filtering**: Only need to check state for done command, all others show everything
+- **Graceful degradation**: Continue even if some yaks can't be retrieved
+
+### Code Quality
+- **Minimal implementation**: Only 61 lines of code
+- **Helper function**: `shouldInclude()` encapsulates filtering logic
+- **No comments needed**: Code is self-documenting
+- **Follows patterns**: Matches other command implementations
+
+
+## Task 14: Completions Install Command
+
+### Install Command Pattern
+- **Subcommand detection**: Check if first arg is "install" before processing
+- **Dry-run support**: Parse `--dry-run` flag from remaining args
+- **Shell detection**: Use `os.Getenv("SHELL")` and `filepath.Base()` to get shell name
+- **RC file mapping**: bash → ~/.bashrc, zsh → ~/.zshrc
+
+### File Operations
+- **Check if writable**: Use `os.OpenFile()` with O_WRONLY|O_APPEND flags
+- **Check if installed**: Read file content and use `strings.Contains()` to check for completion line
+- **Append to file**: Use `fmt.Fprintln()` to add lines to file
+- **Defer close**: Always defer file.Close() after opening
+
+### Error Handling
+- **Unsupported shell**: Print error to stderr with manual instructions
+- **Write failure**: Print error with manual instructions for user to add line themselves
+- **Already installed**: Print message and return success (idempotent)
+
+### Key Insights
+- **Idempotent operation**: Safe to run multiple times, checks if already installed
+- **Graceful degradation**: Provides manual instructions when automatic install fails
+- **Clear user feedback**: Shows what was done or what would be done (dry-run)
+- **Simple shell detection**: Only supports bash and zsh, errors for others
+

@@ -16,6 +16,8 @@ A Yak Map is basically the same as a Mikado Graph or a Discovery Tree.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.Help()
 	},
+	SilenceErrors: true,
+	SilenceUsage:  true,
 }
 
 func main() {

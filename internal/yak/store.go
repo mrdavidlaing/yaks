@@ -49,14 +49,17 @@ func (s *Store) Exists(name string) bool {
 func (s *Store) Get(name string) (*Yak, error) {
 	yakDir := filepath.Join(s.BasePath, name)
 	stateFile := filepath.Join(yakDir, "state")
+	
+	state := StateTodo
 	content, err := os.ReadFile(stateFile)
-	if err != nil {
-		return nil, err
+	if err == nil {
+		stateStr := strings.TrimSpace(string(content))
+		state = State(stateStr)
 	}
-	stateStr := strings.TrimSpace(string(content))
+	
 	return &Yak{
 		Name:        name,
-		State:       State(stateStr),
+		State:       state,
 		ContextPath: filepath.Join(yakDir, "context.md"),
 	}, nil
 }

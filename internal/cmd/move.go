@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 	"strings"
 
 	"github.com/mattwynne/yaks/internal/git"
@@ -42,22 +43,22 @@ func NewMvCmd(store *yak.Store) *cobra.Command {
 func moveYak(store *yak.Store, oldName, newName string) error {
 	resolvedOld, err := yak.FindYak(store, oldName)
 	if err != nil {
-		fmt.Fprintf(nil, "Error: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 		return err
 	}
 
 	if err := yak.ValidateName(newName); err != nil {
-		fmt.Fprintf(nil, "Error: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 		return err
 	}
 
 	if err := store.EnsureParents(newName); err != nil {
-		fmt.Fprintf(nil, "Error: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 		return err
 	}
 
 	if err := store.Move(resolvedOld, newName); err != nil {
-		fmt.Fprintf(nil, "Error: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 		return err
 	}
 	git.LogCommand(store.BasePath, "move "+resolvedOld+" "+newName)
