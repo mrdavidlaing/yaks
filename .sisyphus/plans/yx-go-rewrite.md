@@ -1048,7 +1048,7 @@ Critical Path: 1 → 2 → 3 → 4 → 8 → 11 → 12 → 15
 
 ### Task 13: Cobra Shell Completions
 
-- [ ] 13. Cobra Shell Completions
+- [x] 13. Cobra Shell Completions
 
   **What to do**:
   - Update `internal/cmd/root.go`:
