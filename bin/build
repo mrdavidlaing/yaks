@@ -2,5 +2,5 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 echo "Building yx..."
-go build -o bin/yx ./cmd/yx
+direnv exec . go build -o bin/yx ./cmd/yx
 echo "✓ Built bin/yx"

@@ -2,6 +2,7 @@ package main
 
 import (
 	"os"
+	"strings"
 
 	"github.com/mattwynne/yaks/internal/cmd"
 	"github.com/mattwynne/yaks/internal/yak"
@@ -41,6 +42,11 @@ func main() {
 	rootCmd.AddCommand(cmd.NewCompletionsCmd(store))
 
 	if err := rootCmd.Execute(); err != nil {
+		// Check if it's an unknown command error
+		if strings.Contains(err.Error(), "unknown command") {
+			rootCmd.Help()
+			os.Exit(0)
+		}
 		os.Exit(1)
 	}
 }
