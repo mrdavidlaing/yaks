@@ -35,6 +35,7 @@ func main() {
 	rootCmd.AddCommand(cmd.NewMvCmd(store))
 	rootCmd.AddCommand(cmd.NewPruneCmd(store))
 	rootCmd.AddCommand(cmd.NewSyncCmd(store))
+	rootCmd.AddCommand(cmd.NewCompletionsCmd(store))
 
 	if err := rootCmd.Execute(); err != nil {
 		os.Exit(1)
