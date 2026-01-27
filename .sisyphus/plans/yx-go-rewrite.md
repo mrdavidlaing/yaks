@@ -485,7 +485,7 @@ Critical Path: 1 → 2 → 3 → 4 → 8 → 11 → 12 → 15
 
 ### Task 5: List Command Implementation
 
-- [ ] 5. List Command Implementation
+- [x] 5. List Command Implementation
 
   **What to do**:
   - Create `internal/display/markdown.go`:

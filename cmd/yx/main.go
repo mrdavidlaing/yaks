@@ -28,6 +28,7 @@ func main() {
 	store.Migrate()
 
 	rootCmd.AddCommand(cmd.NewAddCmd(store))
+	rootCmd.AddCommand(cmd.NewListCmd(store))
 	rootCmd.AddCommand(cmd.NewRmCmd(store))
 	rootCmd.AddCommand(cmd.NewContextCmd(store))
 	rootCmd.AddCommand(cmd.NewDoneCmd(store))
