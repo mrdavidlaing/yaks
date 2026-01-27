@@ -28,6 +28,7 @@ func main() {
 	store.Migrate()
 
 	rootCmd.AddCommand(cmd.NewAddCmd(store))
+	rootCmd.AddCommand(cmd.NewRmCmd(store))
 
 	if err := rootCmd.Execute(); err != nil {
 		os.Exit(1)
