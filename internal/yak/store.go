@@ -84,6 +84,58 @@ func (s *Store) Delete(name string) error {
 	return os.RemoveAll(yakDir)
 }
 
+func (s *Store) SetState(name string, state State) error {
+	yakDir := filepath.Join(s.BasePath, name)
+	stateFile := filepath.Join(yakDir, "state")
+	return os.WriteFile(stateFile, []byte(state.String()+"\n"), 0644)
+}
+
+func (s *Store) HasIncompleteChildren(name string) (bool, error) {
+	yakDir := filepath.Join(s.BasePath, name)
+	entries, err := os.ReadDir(yakDir)
+	if err != nil {
+		return false, err
+	}
+
+	for _, entry := range entries {
+		if !entry.IsDir() {
+			continue
+		}
+		childName := filepath.Join(name, entry.Name())
+		y, err := s.Get(childName)
+		if err != nil {
+			continue
+		}
+		if y.State != StateDone {
+			return true, nil
+		}
+	}
+	return false, nil
+}
+
+func (s *Store) MarkDoneRecursively(name string) error {
+	if err := s.SetState(name, StateDone); err != nil {
+		return err
+	}
+
+	yakDir := filepath.Join(s.BasePath, name)
+	entries, err := os.ReadDir(yakDir)
+	if err != nil {
+		return err
+	}
+
+	for _, entry := range entries {
+		if !entry.IsDir() {
+			continue
+		}
+		childName := filepath.Join(name, entry.Name())
+		if err := s.MarkDoneRecursively(childName); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 func (s *Store) Migrate() error {
 	if _, err := os.Stat(s.BasePath); os.IsNotExist(err) {
 		return nil
