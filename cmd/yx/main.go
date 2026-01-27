@@ -1,8 +1,11 @@
 package main
 
 import (
-	"github.com/spf13/cobra"
 	"os"
+
+	"github.com/mattwynne/yaks/internal/cmd"
+	"github.com/mattwynne/yaks/internal/yak"
+	"github.com/spf13/cobra"
 )
 
 var rootCmd = &cobra.Command{
@@ -16,6 +19,16 @@ A Yak Map is basically the same as a Mikado Graph or a Discovery Tree.`,
 }
 
 func main() {
+	yaksPath := os.Getenv("YAKS_PATH")
+	if yaksPath == "" {
+		yaksPath = ".yaks"
+	}
+
+	store := yak.NewStore(yaksPath)
+	store.Migrate()
+
+	rootCmd.AddCommand(cmd.NewAddCmd(store))
+
 	if err := rootCmd.Execute(); err != nil {
 		os.Exit(1)
 	}
