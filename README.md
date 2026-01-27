@@ -43,6 +43,22 @@ cd yaks
 direnv allow
 ```
 
+### Building from Source
+
+The project is written in Go. To build:
+
+```bash
+# Using direnv (recommended)
+direnv exec . go build -o bin/yx-go ./cmd/yx
+
+# Or with Go directly
+go build -o bin/yx-go ./cmd/yx
+```
+
+Requirements:
+- Go 1.25.4 or later
+- Git (for sync functionality)
+
 ## Usage
 
 ```bash
@@ -62,10 +78,17 @@ Tab completion works for yak names after sourcing the completion script.
 
 ## Testing
 
-Uses [ShellSpec](https://shellspec.info/) for testing:
+Uses [ShellSpec](https://shellspec.info/) for integration testing and Go's built-in testing for unit tests:
 
 ```bash
+# Run integration tests
 shellspec
+
+# Run Go unit tests
+go test ./...
+
+# Run all tests
+go test ./... && shellspec
 ```
 
 ## License
