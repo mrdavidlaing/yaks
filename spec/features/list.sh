@@ -1,70 +1,70 @@
 # shellcheck shell=bash
 Describe 'yx list'
-  BeforeEach 'setup_isolated_repo'
-  AfterEach 'teardown_isolated_repo'
+BeforeEach 'setup_isolated_repo'
+AfterEach 'teardown_isolated_repo'
 
-  It 'shows message when no yaks exist'
-    When run yx list --format markdown
-    The output should equal 'You have no yaks. Are you done?'
-  End
+It 'shows message when no yaks exist'
+When run yx list --format markdown
+The output should equal 'You have no yaks. Are you done?'
+End
 
-  It 'lists added yaks'
-    When run sh -c "
+It 'lists added yaks'
+When run sh -c "
       yx add 'Fix the bug'
       yx list --format markdown
     "
-    The output should equal "- [todo] Fix the bug"
-  End
+The output should equal "- [todo] Fix the bug"
+End
 
-  It 'supports ls as an alias for list'
-    When run yx ls --format markdown
-    The output should equal 'You have no yaks. Are you done?'
-  End
+It 'supports ls as an alias for list'
+When run yx ls --format markdown
+The output should equal 'You have no yaks. Are you done?'
+End
 
-  It 'supports ls as an alias for list (with yaks)'
-    When run sh -c "
+It 'supports ls as an alias for list (with yaks)'
+When run sh -c "
       yx add 'Fix the bug'
       yx ls --format markdown
     "
-    The output should equal "- [todo] Fix the bug"
-  End
+The output should equal "- [todo] Fix the bug"
+End
 
-  It 'sorts sibling yaks with done first, then alphabetically'
-    When run sh -c '
+It 'sorts sibling yaks with done first, then alphabetically'
+When run sh -c '
       yx add "zebra" &&
       yx add "mango" &&
       yx add "apple" &&
       yx done "apple" &&
       yx list --format markdown
     '
-    The line 1 should equal $'\e[90m- [done] apple\e[0m'
-    The line 2 should equal "- [todo] mango"
-    The line 3 should equal "- [todo] zebra"
-  End
+The line 1 should equal $'\e[90m- [done] apple\e[0m'
+The line 2 should equal "- [todo] mango"
+The line 3 should equal "- [todo] zebra"
+End
 
-  It 'shows done yaks in grey'
-    When run sh -c '
+It 'shows done yaks in grey'
+When run sh -c '
       yx add "todo task"
       yx add "done task"
       yx done "done task"
       yx list --format markdown
     '
-    The line 1 should equal $'\e[90m- [done] done task\e[0m'
-    The line 2 should equal "- [todo] todo task"
-  End
+The line 1 should equal $'\e[90m- [done] done task\e[0m'
+The line 2 should equal "- [todo] todo task"
+End
 
-  It 'displays nested yaks with indentation'
-    When run sh -c "
+It 'displays nested yaks with indentation'
+When run sh -c "
       yx add 'first task'
       yx add 'first task/second task'
       yx list --format markdown
     "
-    The line 1 should equal "- [todo] first task"
-    The line 2 should equal "  - [todo] second task"
-  End
+The line 1 should equal "- [todo] first task"
+The line 2 should equal "  - [todo] second task"
+End
 
-  It 'keeps hierarchy when child is done'
-    When run sh -c "
+It 'keeps hierarchy when child is done'
+When run sh -c "
       yx add 'parent a' &&
       yx add 'parent a/child 1' &&
       yx add 'parent a/child 2' &&
@@ -72,100 +72,184 @@ Describe 'yx list'
       yx add 'parent b' &&
       yx list --format markdown
     "
-    The line 1 should equal "- [wip] parent a"
-    The line 2 should equal $'\e[90m  - [done] child 1\e[0m'
-    The line 3 should equal "  - [todo] child 2"
-    The line 4 should equal "- [todo] parent b"
-  End
+The line 1 should equal "- [wip] parent a"
+The line 2 should equal $'\e[90m  - [done] child 1\e[0m'
+The line 3 should equal "  - [todo] child 2"
+The line 4 should equal "- [todo] parent b"
+End
 
-  It 'supports --format plain for simple yak names'
-    When run sh -c "
+It 'supports --format plain for simple yak names'
+When run sh -c "
       yx add 'Fix the bug'
       yx ls --format plain
     "
-    The output should equal "Fix the bug"
-  End
+The output should equal "Fix the bug"
+End
 
-  It 'supports --format plain with nested yaks showing full paths'
-    When run sh -c "
+It 'supports --format plain with nested yaks showing full paths'
+When run sh -c "
       yx add 'parent task' &&
       yx add 'parent task/child task' &&
       yx ls --format plain
     "
-    The line 1 should equal "parent task"
-    The line 2 should equal "parent task/child task"
-  End
+The line 1 should equal "parent task"
+The line 2 should equal "parent task/child task"
+End
 
-  It 'supports --format raw as an alias for plain'
-    When run sh -c "
+It 'supports --format raw as an alias for plain'
+When run sh -c "
       yx add 'Fix the bug'
       yx ls --format raw
     "
-    The output should equal "Fix the bug"
-  End
+The output should equal "Fix the bug"
+End
 
-  It 'supports --format markdown explicitly'
-    When run sh -c "
+It 'supports --format markdown explicitly'
+When run sh -c "
       yx add 'Fix the bug'
       yx ls --format markdown
     "
-    The output should equal "- [todo] Fix the bug"
-  End
+The output should equal "- [todo] Fix the bug"
+End
 
-  It 'supports --format md as an alias for markdown'
-    When run sh -c "
+It 'supports --format md as an alias for markdown'
+When run sh -c "
       yx add 'Fix the bug'
       yx ls --format md
     "
-    The output should equal "- [todo] Fix the bug"
-  End
+The output should equal "- [todo] Fix the bug"
+End
 
-  It 'outputs nothing in plain format when no yaks exist'
-    When run yx ls --format plain
-    The output should equal ''
-  End
+It 'outputs nothing in plain format when no yaks exist'
+When run yx ls --format plain
+The output should equal ''
+End
 
-  It 'supports --only not-done to show only incomplete yaks'
-    When run sh -c "
+It 'supports --only not-done to show only incomplete yaks'
+When run sh -c "
       yx add 'incomplete task' &&
       yx add 'done task' &&
       yx done 'done task' &&
       yx ls --format plain --only not-done
     "
-    The output should equal "incomplete task"
-  End
+The output should equal "incomplete task"
+End
 
-  It 'supports --only done to show only completed yaks'
-    When run sh -c "
+It 'supports --only done to show only completed yaks'
+When run sh -c "
       yx add 'incomplete task' &&
       yx add 'done task' &&
       yx done 'done task' &&
       yx ls --format plain --only done
     "
-    The output should equal "done task"
-  End
+The output should equal "done task"
+End
 
-  It 'shows all yaks when no --only filter is specified'
-    When run sh -c "
+It 'shows all yaks when no --only filter is specified'
+When run sh -c "
       yx add 'done task' &&
       yx add 'incomplete task' &&
       yx done 'done task' &&
       yx ls --format plain
     "
-    The line 1 should equal "done task"
-    The line 2 should equal "incomplete task"
-  End
+The line 1 should equal "done task"
+The line 2 should equal "incomplete task"
+End
 
-  It 'includes parent when filtering nested yaks by not-done status'
-    When run sh -c "
+It 'includes parent when filtering nested yaks by not-done status'
+When run sh -c "
       yx add 'parent' &&
       yx add 'parent/done child' &&
       yx add 'parent/incomplete child' &&
       yx done 'parent/done child' &&
       yx ls --format markdown --only not-done
     "
-    The line 1 should equal "- [wip] parent"
-    The line 2 should equal "  - [todo] incomplete child"
-  End
+The line 1 should equal "- [wip] parent"
+The line 2 should equal "  - [todo] incomplete child"
+End
+
+It 'supports --format with template string showing name'
+When run sh -c "
+      yx add 'my-task' &&
+      yx ls --format '{name}'
+    "
+The output should include 'my-task'
+End
+
+It 'supports --format with template string showing field values'
+When run sh -c "
+      yx add 'my-task' &&
+      printf 'Alice' | yx field 'my-task' assigned-to &&
+      yx ls --format '{name} [{assigned-to}]'
+    "
+The output should include 'my-task [Alice]'
+End
+
+It 'renders empty string for missing fields in template'
+When run sh -c "
+      yx add 'my-task' &&
+      yx ls --format '{name} [{assigned-to}]'
+    "
+The output should include 'my-task []'
+End
+
+It 'preserves tree structure with template format'
+When run sh -c "
+      yx add 'parent' &&
+      yx add 'parent/child' &&
+      printf 'Bob' | yx field 'parent/child' assigned-to &&
+      yx ls --format '{name} [{assigned-to}]'
+    "
+The output should include 'parent []'
+The output should include 'child [Bob]'
+End
+
+It 'supports multiple fields in template'
+When run sh -c "
+      yx add 'my-task' &&
+      printf 'Alice' | yx field 'my-task' assigned-to &&
+      printf 'wip: coding' | yx field 'my-task' agent-status &&
+      yx ls --format '{name} [{assigned-to}] {agent-status}'
+    "
+The output should include 'my-task [Alice] wip: coding'
+End
+
+It 'supports worker-first template format'
+When run sh -c "
+      yx add 'my-task' &&
+      printf 'Alice' | yx field 'my-task' assigned-to &&
+      yx ls --format '[{assigned-to}] {name}'
+    "
+The output should include '[Alice] my-task'
+End
+
+It 'supports conditional display that hides block when field is empty'
+When run sh -c "
+      yx add 'my-task' &&
+      yx ls --format '{name}{?assigned-to: [{assigned-to}]}'
+    "
+The output should include 'my-task'
+The output should not include '[]'
+End
+
+It 'supports conditional display that shows block when field is present'
+When run sh -c "
+      yx add 'my-task' &&
+      printf 'Alice' | yx field 'my-task' assigned-to &&
+      yx ls --format '{name}{?assigned-to: [{assigned-to}]}'
+    "
+The output should include 'my-task [Alice]'
+End
+
+It 'supports conditional display with mixed present and absent fields'
+When run sh -c "
+      yx add 'task-a' &&
+      yx add 'task-b' &&
+      printf 'Bob' | yx field 'task-b' assigned-to &&
+      yx ls --format '{name}{?assigned-to: [{assigned-to}]}'
+    "
+The output should include 'task-b [Bob]'
+The output should not include 'task-a ['
+End
 
 End
