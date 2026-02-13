@@ -35,8 +35,8 @@ enum Commands {
         #[arg(
             long,
             default_value = "pretty",
-            help = "Output format: pretty (default), markdown, plain",
-            long_help = "Output format:\n  - pretty: Unicode box-drawing with colored status dots\n  - markdown: Checkbox-style list with indentation\n  - plain: Just yak names, one per line"
+            help = "Output format: pretty (default), markdown, plain, or custom template with {field} placeholders",
+            long_help = "Output format:\n  - pretty: Unicode box-drawing with colored status dots\n  - markdown: Checkbox-style list with indentation\n  - plain: Just yak names, one per line\n  - Custom template: Use {name} for task name, {field-name} for custom fields\n    Conditional: {?field:text shown if field exists}\n    Examples:\n      '{name} [{assigned-to}]'\n      '{name}{?assigned-to: [{assigned-to}]}'"
         )]
         format: String,
         /// Filter by completion status (done, not-done)

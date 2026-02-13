@@ -36,6 +36,57 @@ impl TreePrefix {
 
 use super::{Application, UseCase};
 
+fn is_template_format(format: &str) -> bool {
+    format.contains('{')
+}
+
+fn read_field_value(field_name: &str, name: &str, full_path: &str, app: &Application) -> String {
+    if field_name == "name" {
+        name.to_string()
+    } else {
+        app.store
+            .read_field(full_path, field_name)
+            .unwrap_or_default()
+            .trim()
+            .to_string()
+    }
+}
+
+fn resolve_template(template: &str, name: &str, full_path: &str, app: &Application) -> String {
+    let mut result = String::new();
+    let mut chars = template.chars().peekable();
+    while let Some(ch) = chars.next() {
+        if ch == '{' {
+            let mut tag = String::new();
+            let mut brace_depth = 1;
+            for inner in chars.by_ref() {
+                if inner == '{' {
+                    brace_depth += 1;
+                } else if inner == '}' {
+                    brace_depth -= 1;
+                    if brace_depth == 0 {
+                        break;
+                    }
+                }
+                tag.push(inner);
+            }
+            if let Some(rest) = tag.strip_prefix('?') {
+                if let Some((condition_field, body)) = rest.split_once(':') {
+                    let value = read_field_value(condition_field, name, full_path, app);
+                    if !value.is_empty() {
+                        result.push_str(&resolve_template(body, name, full_path, app));
+                    }
+                }
+            } else {
+                result.push_str(&read_field_value(&tag, name, full_path, app));
+            }
+        } else {
+            result.push(ch);
+        }
+    }
+    result
+}
+
 pub struct ListYaks {
     format: String,
     only: Option<String>,
@@ -54,11 +105,14 @@ impl ListYaks {
         let only = self.only.as_deref();
         let yaks = app.store.list_yaks()?;
 
-        // Normalize format (treat "md" and "raw" as aliases)
-        let normalized_format = match format {
-            "md" => "markdown",
-            "raw" => "plain",
-            other => other,
+        let normalized_format = if is_template_format(format) {
+            format
+        } else {
+            match format {
+                "md" => "markdown",
+                "raw" => "plain",
+                other => other,
+            }
         };
 
         if yaks.is_empty() {
@@ -228,6 +282,19 @@ impl ListYaks {
         }
     }
 
+    fn build_pretty_prefix(prefix: &TreePrefix, is_last: bool) -> String {
+        if prefix.lines.is_empty() {
+            "  ".to_string()
+        } else if prefix.lines.len() == 1 {
+            let connector = if is_last { "╰─ " } else { "├─ " };
+            format!("  {}", connector)
+        } else {
+            let ancestor_continuations = &prefix.lines[1..];
+            let connector = if is_last { "╰─ " } else { "├─ " };
+            format!("  {}{}", ancestor_continuations.join(""), connector)
+        }
+    }
+
     /// Display a single node
     fn display_node(
         &self,
@@ -243,19 +310,18 @@ impl ListYaks {
             .map(|y| y.state.as_str())
             .unwrap_or("todo");
 
+        if is_template_format(format) {
+            let resolved = resolve_template(format, &node.name, &node.full_path, app);
+            let node_prefix = Self::build_pretty_prefix(prefix, is_last);
+            app.display
+                .display_yak_pretty(&node_prefix, &resolved, state);
+            return;
+        }
+
         match format {
             "plain" => app.display.info(&node.full_path),
             "pretty" => {
-                let node_prefix = if prefix.lines.is_empty() {
-                    "  ".to_string()
-                } else if prefix.lines.len() == 1 {
-                    let connector = if is_last { "╰─ " } else { "├─ " };
-                    format!("  {}", connector)
-                } else {
-                    let ancestor_continuations = &prefix.lines[1..];
-                    let connector = if is_last { "╰─ " } else { "├─ " };
-                    format!("  {}{}", ancestor_continuations.join(""), connector)
-                };
+                let node_prefix = Self::build_pretty_prefix(prefix, is_last);
                 app.display
                     .display_yak_pretty(&node_prefix, &node.name, state);
             }
